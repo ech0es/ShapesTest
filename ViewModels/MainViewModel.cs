@@ -1,40 +1,25 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
+using Autofac.Extras.CommonServiceLocator;
+using ShapeTest.Factories;
 
 namespace ShapeTest.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
+        private IShapeViewModelFactory _shapeViewModelFactory;
         public ObservableCollection<ShapeViewModel> Shapes { get; } = new ObservableCollection<ShapeViewModel>();
 
-        public ICommand AddShapeCommand { get; } = new AddShapeCommand();
+        public ICommand AddShapeCommand { get; }
 
         public MainViewModel()
         {
-            Shapes.Add(new SquareViewModel());
-            Shapes.Add(new RectangleViewModel());
-            Shapes.Add(new TriangleViewModel());
-            Shapes.Add(new CircleViewModel());
-            Shapes.Add(new CubeViewModel());
-            Shapes.Add(new TetrahedronViewModel());
-            Shapes.Add(new ParallelepipedViewModel());
-            Shapes.Add(new BallViewModel());
+            var localIoc = new AutofacServiceLocator(new Bootstrapper().BootStrap());
+            AddShapeCommand = localIoc.GetInstance<AddShapeCommand>();
+            ((AddShapeCommand) AddShapeCommand).Shapes = Shapes; // the worst DI I have seen BTW((
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-    }
-
-    public class AddShapeCommand : ICommand
-    {
-        public bool CanExecute(object parameter) => true;
-
-        public void Execute(object parameter)
-        {
-            parameter.ToString();
-        }
-
-        public event EventHandler CanExecuteChanged;
     }
 }

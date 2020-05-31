@@ -8,7 +8,7 @@
         xmlns:views="clr-namespace:ShapeTest.Views"
         xmlns:enums="clr-namespace:ShapeTest.Enums"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="850">
     <Window.Resources>
         <viewModels:MainViewModel x:Key="MainViewModel"/>
     </Window.Resources>
@@ -43,7 +43,124 @@
                                Text="Square"/>
                 </Grid>
             </Button>
+            <Button Command="{Binding AddShapeCommand}" CommandParameter="{x:Static enums:Shapes.Rectangle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Image Height="92"
+                           Width="92"
+                           HorizontalAlignment="Center"
+                           Margin="2"
+                           Source="../Images/rectangle.png"/>
+                    <TextBlock Grid.Row="1"
+                               HorizontalAlignment="Center"
+                               Text="Rectangle"/>
+                </Grid>
+            </Button>
 
+            <Button Command="{Binding AddShapeCommand}" CommandParameter="{x:Static enums:Shapes.Triangle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Image Height="92"
+                           Width="92"
+                           HorizontalAlignment="Center"
+                           Margin="2"
+                           Source="../Images/triangle.png"/>
+                    <TextBlock Grid.Row="1"
+                               HorizontalAlignment="Center"
+                               Text="Triangle"/>
+                </Grid>
+            </Button>
+
+            <Button Command="{Binding AddShapeCommand}" CommandParameter="{x:Static enums:Shapes.Circle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Image Height="92"
+                           Width="92"
+                           HorizontalAlignment="Center"
+                           Margin="2"
+                           Source="../Images/circle.png"/>
+                    <TextBlock Grid.Row="1"
+                               HorizontalAlignment="Center"
+                               Text="Circle"/>
+                </Grid>
+            </Button>
+
+            <Button Command="{Binding AddShapeCommand}" CommandParameter="{x:Static enums:Shapes.Cube}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Image Height="92"
+                           Width="92"
+                           HorizontalAlignment="Center"
+                           Margin="2"
+                           Source="../Images/cube.png"/>
+                    <TextBlock Grid.Row="1"
+                               HorizontalAlignment="Center"
+                               Text="Cube"/>
+                </Grid>
+            </Button>
+
+            <Button Command="{Binding AddShapeCommand}" CommandParameter="{x:Static enums:Shapes.Tetrahedron}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Image Height="92"
+                           Width="92"
+                           HorizontalAlignment="Center"
+                           Margin="2"
+                           Source="../Images/tetrahedron.png"/>
+                    <TextBlock Grid.Row="1"
+                               HorizontalAlignment="Center"
+                               Text="Tetrahedron"/>
+                </Grid>
+            </Button>
+
+            <Button Command="{Binding AddShapeCommand}" CommandParameter="{x:Static enums:Shapes.Parallelepiped}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Image Height="92"
+                           Width="92"
+                           HorizontalAlignment="Center"
+                           Margin="2"
+                           Source="../Images/parallelepiped.png"/>
+                    <TextBlock Grid.Row="1"
+                               HorizontalAlignment="Center"
+                               Text="Parallelepiped"/>
+                </Grid>
+            </Button>
+
+            <Button Command="{Binding AddShapeCommand}" CommandParameter="{x:Static enums:Shapes.Ball}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Image Height="92"
+                           Width="92"
+                           HorizontalAlignment="Center"
+                           Margin="2"
+                           Source="../Images/ball.png"/>
+                    <TextBlock Grid.Row="1"
+                               HorizontalAlignment="Center"
+                               Text="Ball"/>
+                </Grid>
+            </Button>
         </WrapPanel>
 
         <views:ShapeList Grid.Row="1"
