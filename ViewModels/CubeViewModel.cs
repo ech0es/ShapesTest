@@ -10,6 +10,11 @@ namespace ShapeTest.ViewModels
 
         private double _length;
 
+        public CubeViewModel()
+        {
+            NotifyPropertyChange(LengthChangedEventArgs);
+        }
+
         public double Length
         {
             get => _length;

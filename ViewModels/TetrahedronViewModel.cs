@@ -13,6 +13,11 @@ namespace ShapeTest.ViewModels
 
         private double _length;
 
+        public TetrahedronViewModel()
+        {
+            NotifyPropertyChange(LengthChangedEventArgs);
+        }
+
         public double Length
         {
             get => _length;

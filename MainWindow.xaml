@@ -4,9 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShapeTest"
+        xmlns:viewModels="clr-namespace:ShapeTest.ViewModels"
+        xmlns:views="clr-namespace:ShapeTest.Views"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+    <Window.Resources>
+        <viewModels:MainViewModel x:Key="MainViewModel"/>
+    </Window.Resources>
+
+    <Grid DataContext="{StaticResource MainViewModel}">
+        <views:ShapeList Shapes="{Binding Shapes}"/>
     </Grid>
 </Window>

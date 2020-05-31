@@ -17,6 +17,11 @@ namespace ShapeTest.ViewModels
         private double _length;
         private double _width;
 
+        public ParallelepipedViewModel()
+        {
+            NotifyPropertyChange(HeightChangedEventArgs);
+        }
+
         public double Length
         {
             get => _length;
@@ -58,6 +63,6 @@ namespace ShapeTest.ViewModels
 
         protected override double CalculateArea() =>  2 * (Width * Height + Width * Length + Height * Length);
 
-        protected override double? CalculateVolume() => Width * Height * Length
+        protected override double? CalculateVolume() => Width * Height * Length;
     }
 }

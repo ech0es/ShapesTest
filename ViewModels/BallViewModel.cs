@@ -12,6 +12,11 @@ namespace ShapeTest.ViewModels
 
         private double _radius;
 
+        public BallViewModel()
+        {
+            NotifyPropertyChange(RadiusChangedEventArgs);
+        }
+
         public double Radius
         {
             get => _radius;
