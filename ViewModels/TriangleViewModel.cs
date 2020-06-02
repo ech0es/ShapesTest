@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace ShapeTest.ViewModels
 {
@@ -18,7 +19,7 @@ namespace ShapeTest.ViewModels
             {
                 if (_length != value)
                 {
-                    _length = value;
+                    _length = Math.Abs(value);
                     NotifyPropertyChange(LengthChangedEventArgs);
                 }
             }

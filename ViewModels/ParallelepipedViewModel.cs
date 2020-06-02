@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace ShapeTest.ViewModels
 {
@@ -29,7 +30,7 @@ namespace ShapeTest.ViewModels
             {
                 if (_length != value)
                 {
-                    _length = value;
+                    _length = Math.Abs(value);
                     NotifyPropertyChange(LengthChangedEventArgs);
                 }
             }
@@ -42,7 +43,7 @@ namespace ShapeTest.ViewModels
             {
                 if (_width != value)
                 {
-                    _width = value;
+                    _width = Math.Abs(value);
                     NotifyPropertyChange(WidthChangedEventArgs);
                 }
             }
@@ -55,7 +56,7 @@ namespace ShapeTest.ViewModels
             {
                 if (_height != value)
                 {
-                    _height = value;
+                    _height = Math.Abs(value);
                     NotifyPropertyChange(HeightChangedEventArgs);
                 }
             }

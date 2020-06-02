@@ -24,7 +24,7 @@ namespace ShapeTest.ViewModels
             {
                 if (_radius != value)
                 {
-                    _radius = value;
+                    _radius = Math.Abs(value);
                     NotifyPropertyChange(RadiusChangedEventArgs);
                 }
             }
