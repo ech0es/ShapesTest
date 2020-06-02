@@ -299,6 +299,7 @@
             <ListBox Grid.Row="1"
                      BorderThickness="0"
                      SelectionMode="Single"
+                     SelectedItem="{Binding  RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ShapeList}}, Path=SelectedShape, Mode=TwoWay}"
                      ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ShapeList}}, Path=Shapes}">
                 <ListBox.Resources>
 

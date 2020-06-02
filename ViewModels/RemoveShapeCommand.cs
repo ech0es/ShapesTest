@@ -11,11 +11,12 @@ namespace ShapeTest.ViewModels
         public RemoveShapeCommand(ObservableCollection<ShapeViewModel> shapes)
         {
             _shapes = shapes;
+            CommandManager.RequerySuggested += CommandManagerOnRequerySuggested;
         }
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            return parameter != null;
         }
 
         public void Execute(object parameter)
@@ -24,5 +25,10 @@ namespace ShapeTest.ViewModels
         }
 
         public event EventHandler CanExecuteChanged;
+
+        private void CommandManagerOnRequerySuggested(object sender, EventArgs e)
+        {
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

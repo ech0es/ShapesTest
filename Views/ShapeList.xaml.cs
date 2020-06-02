@@ -14,10 +14,16 @@ namespace ShapeTest.Views
             new PropertyMetadata(default(ObservableCollection<ShapeViewModel>)));
 
         public static readonly DependencyProperty RemoveShapeCommandProperty = DependencyProperty.Register(
-            "RemoveShapeCommand", 
-            typeof(ICommand), 
+            "RemoveShapeCommand",
+            typeof(ICommand),
             typeof(ShapeList),
             new PropertyMetadata(default(ICommand)));
+
+        public static readonly DependencyProperty SelectedShapeProperty = DependencyProperty.Register(
+            "SelectedShape",
+            typeof(ShapeViewModel),
+            typeof(ShapeList),
+            new PropertyMetadata(default(ShapeViewModel)));
 
         public ShapeList()
         {
@@ -34,6 +40,12 @@ namespace ShapeTest.Views
         {
             get => (ICommand) GetValue(RemoveShapeCommandProperty);
             set => SetValue(RemoveShapeCommandProperty, value);
+        }
+
+        public ShapeViewModel SelectedShape
+        {
+            get => (ShapeViewModel) GetValue(SelectedShapeProperty);
+            set => SetValue(SelectedShapeProperty, value);
         }
     }
 }
