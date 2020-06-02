@@ -147,8 +147,17 @@
                 <Rectangle Width="50"
                            Height="50"
                            Stroke="DarkGreen"
-                           Fill="Green"
-                           Stretch="Uniform" />
+                           Fill="Green" />
+            </Viewbox>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModels:RectangleViewModel}">
+            <Viewbox Stretch="Uniform"
+                     Margin="35">
+                <Rectangle Width="{Binding Width}"
+                           Height="{Binding Height}"
+                           Stroke="DarkGreen"
+                           Fill="Green"/>
             </Viewbox>
         </DataTemplate>
 
