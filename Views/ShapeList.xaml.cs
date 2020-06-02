@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Input;
 using ShapeTest.ViewModels;
 
 namespace ShapeTest.Views
@@ -12,6 +13,12 @@ namespace ShapeTest.Views
             typeof(ShapeList),
             new PropertyMetadata(default(ObservableCollection<ShapeViewModel>)));
 
+        public static readonly DependencyProperty RemoveShapeCommandProperty = DependencyProperty.Register(
+            "RemoveShapeCommand", 
+            typeof(ICommand), 
+            typeof(ShapeList),
+            new PropertyMetadata(default(ICommand)));
+
         public ShapeList()
         {
             InitializeComponent();
@@ -21,6 +28,12 @@ namespace ShapeTest.Views
         {
             get => (ObservableCollection<ShapeViewModel>) GetValue(ShapesProperty);
             set => SetValue(ShapesProperty, value);
+        }
+
+        public ICommand RemoveShapeCommand
+        {
+            get => (ICommand) GetValue(RemoveShapeCommandProperty);
+            set => SetValue(RemoveShapeCommandProperty, value);
         }
     }
 }

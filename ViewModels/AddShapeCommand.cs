@@ -8,21 +8,26 @@ namespace ShapeTest.ViewModels
 {
     public class AddShapeCommand : ICommand
     {
+        private readonly ObservableCollection<ShapeViewModel> _shapes;
         private readonly IShapeViewModelFactory _shapeViewModelFactory;
 
-        public AddShapeCommand(IShapeViewModelFactory shapeViewModelFactory)
+        public AddShapeCommand(
+            IShapeViewModelFactory shapeViewModelFactory,
+            ObservableCollection<ShapeViewModel> shapes)
         {
             _shapeViewModelFactory = shapeViewModelFactory;
+            _shapes = shapes;
         }
 
-        internal ObservableCollection<ShapeViewModel> Shapes { get; set; }
-
-        public bool CanExecute(object parameter) => true;
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
 
         public void Execute(object parameter)
         {
-            var shapeViewModel = _shapeViewModelFactory.CreateShape(((Shapes)parameter));
-            Shapes.Add(shapeViewModel);
+            var shapeViewModel = _shapeViewModelFactory.CreateShape((Shapes) parameter);
+            _shapes.Add(shapeViewModel);
         }
 
         public event EventHandler CanExecuteChanged;

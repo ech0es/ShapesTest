@@ -85,6 +85,7 @@
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ParallelepipedViewModel.cs" />
     <Compile Include="ViewModels\RectangleViewModel.cs" />
+    <Compile Include="ViewModels\RemoveShapeCommand.cs" />
     <Compile Include="ViewModels\ShapeViewModel.cs" />
     <Compile Include="ViewModels\SquareViewModel.cs" />
     <Compile Include="ViewModels\TetrahedronViewModel.cs" />

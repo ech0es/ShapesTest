@@ -164,6 +164,7 @@
         </WrapPanel>
 
         <views:ShapeList Grid.Row="1"
-                         Shapes="{Binding Shapes}"/>
+                         Shapes="{Binding Shapes}"
+                         RemoveShapeCommand="{Binding RemoveShapeCommand}"/>
     </Grid>
 </Window>

@@ -139,6 +139,108 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="RemoveButtonFocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Control}">
+                        <Grid Margin="8">
+                            <Ellipse
+                                Name="r1"
+                                Stroke="Black"
+                                StrokeDashArray="2 2"
+                                StrokeThickness="1" />
+                            <Border
+                                Name="border"
+                                Width="{TemplateBinding ActualWidth}"
+                                Height="{TemplateBinding ActualHeight}"
+                                BorderThickness="1"
+                                CornerRadius="2" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="RemoveButton"
+               TargetType="{x:Type Button}">
+            <Setter Property="OverridesDefaultStyle"
+                    Value="True" />
+            <Setter Property="FocusVisualStyle"
+                    Value="{StaticResource RemoveButtonFocusVisual}" />
+            <Setter Property="Background"
+                    Value="DarkRed" />
+            <Setter Property="Foreground"
+                    Value="White" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+            <Setter Property="Margin"
+                    Value="-4 0 0 0" />
+            <Setter Property="Width"
+                    Value="16" />
+            <Setter Property="Height"
+                    Value="16" />
+            <Setter Property="Content"
+                    Value="✕" />
+            <Setter Property="Command"
+                    Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ShapeList}}, Path=RemoveShapeCommand}" />
+            <Setter Property="CommandParameter"
+                    Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=DataContext}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Ellipse Fill="{TemplateBinding Background}" />
+                            <Ellipse>
+                                <Ellipse.Fill>
+                                    <RadialGradientBrush>
+                                        <GradientStop Offset="0" Color="#00000000" />
+                                        <GradientStop Offset="0.88" Color="#00000000" />
+                                        <GradientStop Offset="1" Color="#80000000" />
+                                    </RadialGradientBrush>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <Ellipse Margin="10" x:Name="highlightCircle">
+                                <Ellipse.Fill>
+                                    <LinearGradientBrush>
+                                        <GradientStop Offset="0" Color="#50FFFFFF" />
+                                        <GradientStop Offset="0.5" Color="#00FFFFFF" />
+                                        <GradientStop Offset="1" Color="#50FFFFFF" />
+                                    </LinearGradientBrush>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <ContentPresenter x:Name="content" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="highlightCircle" Property="Fill">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0.3,0" EndPoint="0.7,1">
+                                            <GradientStop Offset="0" Color="#50FFFFFF" />
+                                            <GradientStop Offset="0.5" Color="#00FFFFFF" />
+                                            <GradientStop Offset="1" Color="#50FFFFFF" />
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="content" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <TranslateTransform Y="0.5" X="0.5" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Visibility"
+                    Value="Hidden" />
+            <Style.Triggers>
+                <DataTrigger
+                    Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsMouseOver}"
+                    Value="True">
+                    <Setter Property="Visibility"
+                            Value="Visible" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
 
     <ScrollViewer HorizontalScrollBarVisibility="Auto">
@@ -150,6 +252,7 @@
 
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="23" />
                     <ColumnDefinition Width="100" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="100" />
@@ -158,16 +261,12 @@
 
                 <Border Grid.Column="0"
                         BorderBrush="Black"
-                        BorderThickness="1 1 .5 1">
-                    <TextBlock Text="Type"
-                               HorizontalAlignment="Center"
-                               Margin="2" />
-                </Border>
+                        BorderThickness="1 1 .5 1" />
 
                 <Border Grid.Column="1"
                         BorderBrush="Black"
                         BorderThickness=".5 1">
-                    <TextBlock Text="Dimensions"
+                    <TextBlock Text="Type"
                                HorizontalAlignment="Center"
                                Margin="2" />
                 </Border>
@@ -175,12 +274,20 @@
                 <Border Grid.Column="2"
                         BorderBrush="Black"
                         BorderThickness=".5 1">
-                    <TextBlock Text="Area"
+                    <TextBlock Text="Dimensions"
                                HorizontalAlignment="Center"
                                Margin="2" />
                 </Border>
 
                 <Border Grid.Column="3"
+                        BorderBrush="Black"
+                        BorderThickness=".5 1">
+                    <TextBlock Text="Area"
+                               HorizontalAlignment="Center"
+                               Margin="2" />
+                </Border>
+
+                <Border Grid.Column="4"
                         BorderBrush="Black"
                         BorderThickness=".5 1 1 1">
                     <TextBlock Text="Volume"
@@ -189,329 +296,360 @@
                 </Border>
             </Grid>
 
-            <ScrollViewer Grid.Row="1"
-                          VerticalScrollBarVisibility="Auto">
-                <ItemsControl
-                    ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ShapeList}}, Path=Shapes}">
-                    <ItemsControl.Resources>
+            <ListBox Grid.Row="1"
+                     BorderThickness="0"
+                     SelectionMode="Single"
+                     ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ShapeList}}, Path=Shapes}">
+                <ListBox.Resources>
 
-                        <DataTemplate DataType="{x:Type viewModels:SquareViewModel}">
-                            <Grid Margin="2">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="100" />
-                                </Grid.ColumnDefinitions>
+                    <DataTemplate DataType="{x:Type viewModels:SquareViewModel}">
+                        <Grid Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="23" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
 
-                                <TextBlock Grid.Column="0"
-                                           Text="Square"
-                                           HorizontalAlignment="Left"
-                                           Margin="2" />
+                            <Button Grid.Column="0"
+                                    Style="{StaticResource RemoveButton}" />
 
-                                <StackPanel Orientation="Horizontal"
-                                            Grid.Column="1"
-                                            HorizontalAlignment="Left"
-                                            Margin="2">
-                                    <TextBlock Width="40"
-                                               Text="Length:" />
-                                    <TextBox Width="40"
-                                             Margin="4 0"
-                                             TextAlignment="Right"
-                                             Text="{Binding Length, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
-                                <TextBlock Grid.Column="2"
-                                           Text="{Binding Area, StringFormat={}{0:#,0.00}}"
-                                           HorizontalAlignment="Center"
-                                           Margin="2" />
-                                <TextBlock Grid.Column="3"
-                                           Text="{Binding Volume, StringFormat={}{0:#,0.00}, TargetNullValue='-'}"
-                                           HorizontalAlignment="Center"
-                                           Margin="2" />
-                            </Grid>
-                        </DataTemplate>
+                            <TextBlock Grid.Column="1"
+                                       Text="Square"
+                                       HorizontalAlignment="Left"
+                                       Margin="2" />
 
-                        <DataTemplate DataType="{x:Type viewModels:RectangleViewModel}">
-                            <Grid Margin="2">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="100" />
-                                </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="2"
+                                        HorizontalAlignment="Left"
+                                        Margin="2">
+                                <TextBlock Width="40"
+                                           Text="Length:" />
+                                <TextBox Width="40"
+                                         Margin="4 0"
+                                         TextAlignment="Right"
+                                         Text="{Binding Length, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                            <TextBlock Grid.Column="3"
+                                       Text="{Binding Area, StringFormat={}{0:#,0.00}}"
+                                       HorizontalAlignment="Center"
+                                       Margin="2" />
+                            <TextBlock Grid.Column="4"
+                                       Text="{Binding Volume, StringFormat={}{0:#,0.00}, TargetNullValue='-'}"
+                                       HorizontalAlignment="Center"
+                                       Margin="2" />
+                        </Grid>
+                    </DataTemplate>
 
-                                <TextBlock Grid.Column="0"
-                                           Text="Rectangle"
-                                           HorizontalAlignment="Left"
-                                           Margin="2" />
+                    <DataTemplate DataType="{x:Type viewModels:RectangleViewModel}">
+                        <Grid Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="23" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
 
-                                <StackPanel Orientation="Horizontal"
-                                            Grid.Column="1"
-                                            HorizontalAlignment="Left"
-                                            Margin="2">
-                                    <TextBlock Width="40"
-                                               Text="Width:" />
-                                    <TextBox Width="40"
-                                             Margin="4 0 8 0"
-                                             TextAlignment="Right"
-                                             Text="{Binding Width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBlock Width="40"
-                                               Text="Height:" />
-                                    <TextBox Width="40"
-                                             Margin="4 0"
-                                             TextAlignment="Right"
-                                             Text="{Binding Height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
+                            <Button Grid.Column="0"
+                                    Style="{StaticResource RemoveButton}" />
 
-                                <TextBlock Grid.Column="2"
-                                           Text="{Binding Area, StringFormat={}{0:#,0.00}}"
-                                           HorizontalAlignment="Center"
-                                           Margin="2" />
+                            <TextBlock Grid.Column="1"
+                                       Text="Rectangle"
+                                       HorizontalAlignment="Left"
+                                       Margin="2" />
 
-                                <TextBlock Grid.Column="3"
-                                           Text="{Binding Volume, StringFormat={}{0:#,0.00}, TargetNullValue='-'}"
-                                           HorizontalAlignment="Center"
-                                           Margin="2" />
-                            </Grid>
-                        </DataTemplate>
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="2"
+                                        HorizontalAlignment="Left"
+                                        Margin="2">
+                                <TextBlock Width="40"
+                                           Text="Width:" />
+                                <TextBox Width="40"
+                                         Margin="4 0 8 0"
+                                         TextAlignment="Right"
+                                         Text="{Binding Width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBlock Width="40"
+                                           Text="Height:" />
+                                <TextBox Width="40"
+                                         Margin="4 0"
+                                         TextAlignment="Right"
+                                         Text="{Binding Height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
 
-                        <DataTemplate DataType="{x:Type viewModels:TriangleViewModel}">
-                            <Grid Margin="2">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="100" />
-                                </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="3"
+                                       Text="{Binding Area, StringFormat={}{0:#,0.00}}"
+                                       HorizontalAlignment="Center"
+                                       Margin="2" />
 
-                                <TextBlock Grid.Column="0"
-                                           Text="Triangle"
-                                           HorizontalAlignment="Left"
-                                           Margin="2" />
+                            <TextBlock Grid.Column="4"
+                                       Text="{Binding Volume, StringFormat={}{0:#,0.00}, TargetNullValue='-'}"
+                                       HorizontalAlignment="Center"
+                                       Margin="2" />
+                        </Grid>
+                    </DataTemplate>
 
-                                <StackPanel Orientation="Horizontal"
-                                            Grid.Column="1"
-                                            HorizontalAlignment="Left"
-                                            Margin="2">
-                                    <TextBlock Width="40"
-                                               Text="Length:" />
-                                    <TextBox Width="40"
-                                             Margin="4 0"
-                                             TextAlignment="Right"
-                                             Text="{Binding Length, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
-                                <TextBlock Grid.Column="2"
-                                           Text="{Binding Area, StringFormat={}{0:#,0.00}}"
-                                           HorizontalAlignment="Center"
-                                           Margin="2" />
-                                <TextBlock Grid.Column="3"
-                                           Text="{Binding Volume, StringFormat={}{0:#,0.00}, TargetNullValue='-'}"
-                                           HorizontalAlignment="Center"
-                                           Margin="2" />
-                            </Grid>
-                        </DataTemplate>
+                    <DataTemplate DataType="{x:Type viewModels:TriangleViewModel}">
+                        <Grid Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="23" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
 
-                        <DataTemplate DataType="{x:Type viewModels:CircleViewModel}">
-                            <Grid Margin="2">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="100" />
-                                </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0"
+                                    Style="{StaticResource RemoveButton}" />
 
-                                <TextBlock Grid.Column="0"
-                                           Text="Circle"
-                                           HorizontalAlignment="Left"
-                                           Margin="2" />
+                            <TextBlock Grid.Column="1"
+                                       Text="Triangle"
+                                       HorizontalAlignment="Left"
+                                       Margin="2" />
 
-                                <StackPanel Orientation="Horizontal"
-                                            Grid.Column="1"
-                                            HorizontalAlignment="Left"
-                                            Margin="2">
-                                    <TextBlock Width="40"
-                                               Text="Radius:" />
-                                    <TextBox Width="40"
-                                             Margin="4 0"
-                                             TextAlignment="Right"
-                                             Text="{Binding Radius, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="2"
+                                        HorizontalAlignment="Left"
+                                        Margin="2">
+                                <TextBlock Width="40"
+                                           Text="Length:" />
+                                <TextBox Width="40"
+                                         Margin="4 0"
+                                         TextAlignment="Right"
+                                         Text="{Binding Length, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                            <TextBlock Grid.Column="3"
+                                       Text="{Binding Area, StringFormat={}{0:#,0.00}}"
+                                       HorizontalAlignment="Center"
+                                       Margin="2" />
+                            <TextBlock Grid.Column="4"
+                                       Text="{Binding Volume, StringFormat={}{0:#,0.00}, TargetNullValue='-'}"
+                                       HorizontalAlignment="Center"
+                                       Margin="2" />
+                        </Grid>
+                    </DataTemplate>
 
-                                <TextBlock Grid.Column="2"
-                                           Text="{Binding Area, StringFormat={}{0:#,0.00}}"
-                                           HorizontalAlignment="Center"
-                                           Margin="2" />
+                    <DataTemplate DataType="{x:Type viewModels:CircleViewModel}">
+                        <Grid Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="23" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
 
-                                <TextBlock Grid.Column="3"
-                                           Text="{Binding Volume, StringFormat={}{0:#,0.00}, TargetNullValue='-'}"
-                                           HorizontalAlignment="Center"
-                                           Margin="2" />
-                            </Grid>
-                        </DataTemplate>
+                            <Button Grid.Column="0"
+                                    Style="{StaticResource RemoveButton}" />
 
-                        <DataTemplate DataType="{x:Type viewModels:CubeViewModel}">
-                            <Grid Margin="2">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="100" />
-                                </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="1"
+                                       Text="Circle"
+                                       HorizontalAlignment="Left"
+                                       Margin="2" />
 
-                                <TextBlock Grid.Column="0"
-                                           Text="Cube"
-                                           HorizontalAlignment="Left"
-                                           Margin="2" />
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="2"
+                                        HorizontalAlignment="Left"
+                                        Margin="2">
+                                <TextBlock Width="40"
+                                           Text="Radius:" />
+                                <TextBox Width="40"
+                                         Margin="4 0"
+                                         TextAlignment="Right"
+                                         Text="{Binding Radius, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
 
-                                <StackPanel Orientation="Horizontal"
-                                            Grid.Column="1"
-                                            HorizontalAlignment="Left"
-                                            Margin="2">
-                                    <TextBlock Width="40"
-                                               Text="Length:" />
-                                    <TextBox Width="40"
-                                             Margin="4 0"
-                                             TextAlignment="Right"
-                                             Text="{Binding Length, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
-                                <TextBlock Grid.Column="2"
-                                           Text="{Binding Area, StringFormat={}{0:#,0.00}}"
-                                           HorizontalAlignment="Center"
-                                           Margin="2" />
+                            <TextBlock Grid.Column="3"
+                                       Text="{Binding Area, StringFormat={}{0:#,0.00}}"
+                                       HorizontalAlignment="Center"
+                                       Margin="2" />
 
-                                <TextBlock Grid.Column="3"
-                                           Text="{Binding Volume, StringFormat={}{0:#,0.00}, TargetNullValue='-'}"
-                                           HorizontalAlignment="Center"
-                                           Margin="2" />
-                            </Grid>
-                        </DataTemplate>
+                            <TextBlock Grid.Column="4"
+                                       Text="{Binding Volume, StringFormat={}{0:#,0.00}, TargetNullValue='-'}"
+                                       HorizontalAlignment="Center"
+                                       Margin="2" />
+                        </Grid>
+                    </DataTemplate>
 
-                        <DataTemplate DataType="{x:Type viewModels:TetrahedronViewModel}">
-                            <Grid Margin="2">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="100" />
-                                </Grid.ColumnDefinitions>
+                    <DataTemplate DataType="{x:Type viewModels:CubeViewModel}">
+                        <Grid Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="23" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
 
-                                <TextBlock Grid.Column="0"
-                                           Text="Tetrahedron"
-                                           HorizontalAlignment="Left"
-                                           Margin="2" />
+                            <Button Grid.Column="0"
+                                    Style="{StaticResource RemoveButton}" />
 
-                                <StackPanel Orientation="Horizontal"
-                                            Grid.Column="1"
-                                            HorizontalAlignment="Left"
-                                            Margin="2">
-                                    <TextBlock Width="40"
-                                               Text="Length:" />
-                                    <TextBox Width="40"
-                                             Margin="4 0"
-                                             TextAlignment="Right"
-                                             Text="{Binding Length, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
+                            <TextBlock Grid.Column="1"
+                                       Text="Cube"
+                                       HorizontalAlignment="Left"
+                                       Margin="2" />
 
-                                <TextBlock Grid.Column="2"
-                                           Text="{Binding Area, StringFormat={}{0:#,0.00}}"
-                                           HorizontalAlignment="Center"
-                                           Margin="2" />
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="2"
+                                        HorizontalAlignment="Left"
+                                        Margin="2">
+                                <TextBlock Width="40"
+                                           Text="Length:" />
+                                <TextBox Width="40"
+                                         Margin="4 0"
+                                         TextAlignment="Right"
+                                         Text="{Binding Length, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                            <TextBlock Grid.Column="3"
+                                       Text="{Binding Area, StringFormat={}{0:#,0.00}}"
+                                       HorizontalAlignment="Center"
+                                       Margin="2" />
 
-                                <TextBlock Grid.Column="3"
-                                           Text="{Binding Volume, StringFormat={}{0:#,0.00}, TargetNullValue='-'}"
-                                           HorizontalAlignment="Center"
-                                           Margin="2" />
-                            </Grid>
-                        </DataTemplate>
+                            <TextBlock Grid.Column="4"
+                                       Text="{Binding Volume, StringFormat={}{0:#,0.00}, TargetNullValue='-'}"
+                                       HorizontalAlignment="Center"
+                                       Margin="2" />
+                        </Grid>
+                    </DataTemplate>
 
-                        <DataTemplate DataType="{x:Type viewModels:ParallelepipedViewModel}">
-                            <Grid Margin="2">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="100" />
-                                </Grid.ColumnDefinitions>
+                    <DataTemplate DataType="{x:Type viewModels:TetrahedronViewModel}">
+                        <Grid Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="23" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
 
-                                <TextBlock Grid.Column="0"
-                                           Text="Parallelepiped"
-                                           HorizontalAlignment="Left"
-                                           Margin="2" />
+                            <Button Grid.Column="0"
+                                    Style="{StaticResource RemoveButton}" />
 
-                                <StackPanel Orientation="Horizontal"
-                                            Grid.Column="1"
-                                            HorizontalAlignment="Left"
-                                            Margin="2">
-                                    <TextBlock Width="40"
-                                               Text="Width:" />
-                                    <TextBox Width="40"
-                                             Margin="4 0 8 0"
-                                             TextAlignment="Right"
-                                             Text="{Binding Width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBlock Width="40"
-                                               Text="Height:" />
-                                    <TextBox Width="40"
-                                             Margin="4 0 8 0"
-                                             TextAlignment="Right"
-                                             Text="{Binding Height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                    <TextBlock Width="40"
-                                               Text="Length:" />
-                                    <TextBox Width="40"
-                                             Margin="4 0"
-                                             TextAlignment="Right"
-                                             Text="{Binding Length, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
-                                <TextBlock Grid.Column="2"
-                                           Text="{Binding Area, StringFormat={}{0:#,0.00}}"
-                                           HorizontalAlignment="Center"
-                                           Margin="2" />
-                                <TextBlock Grid.Column="3"
-                                           Text="{Binding Volume, StringFormat={}{0:#,0.00}, TargetNullValue='-'}"
-                                           HorizontalAlignment="Center"
-                                           Margin="2" />
-                            </Grid>
-                        </DataTemplate>
+                            <TextBlock Grid.Column="1"
+                                       Text="Tetrahedron"
+                                       HorizontalAlignment="Left"
+                                       Margin="2" />
 
-                        <DataTemplate DataType="{x:Type viewModels:BallViewModel}">
-                            <Grid Margin="2">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="100" />
-                                </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="2"
+                                        HorizontalAlignment="Left"
+                                        Margin="2">
+                                <TextBlock Width="40"
+                                           Text="Length:" />
+                                <TextBox Width="40"
+                                         Margin="4 0"
+                                         TextAlignment="Right"
+                                         Text="{Binding Length, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
 
-                                <TextBlock Grid.Column="0"
-                                           Text="Ball"
-                                           HorizontalAlignment="Left"
-                                           Margin="2" />
+                            <TextBlock Grid.Column="3"
+                                       Text="{Binding Area, StringFormat={}{0:#,0.00}}"
+                                       HorizontalAlignment="Center"
+                                       Margin="2" />
 
-                                <StackPanel Orientation="Horizontal"
-                                            Grid.Column="1"
-                                            HorizontalAlignment="Left"
-                                            Margin="2">
-                                    <TextBlock Width="40"
-                                               Text="Radius:" />
-                                    <TextBox Width="40"
-                                             Margin="4 0"
-                                             TextAlignment="Right"
-                                             Text="{Binding Radius, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
+                            <TextBlock Grid.Column="4"
+                                       Text="{Binding Volume, StringFormat={}{0:#,0.00}, TargetNullValue='-'}"
+                                       HorizontalAlignment="Center"
+                                       Margin="2" />
+                        </Grid>
+                    </DataTemplate>
 
-                                <TextBlock Grid.Column="2"
-                                           Text="{Binding Area, StringFormat={}{0:#,0.00}}"
-                                           HorizontalAlignment="Center"
-                                           Margin="2" />
+                    <DataTemplate DataType="{x:Type viewModels:ParallelepipedViewModel}">
+                        <Grid Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="23" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
 
-                                <TextBlock Grid.Column="3"
-                                           Text="{Binding Volume, StringFormat={}{0:#,0.00}, TargetNullValue='-'}"
-                                           HorizontalAlignment="Center"
-                                           Margin="2" />
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.Resources>
-                </ItemsControl>
-            </ScrollViewer>
+                            <Button Grid.Column="0"
+                                    Style="{StaticResource RemoveButton}" />
+
+                            <TextBlock Grid.Column="1"
+                                       Text="Parallelepiped"
+                                       HorizontalAlignment="Left"
+                                       Margin="2" />
+
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="2"
+                                        HorizontalAlignment="Left"
+                                        Margin="2">
+                                <TextBlock Width="40"
+                                           Text="Width:" />
+                                <TextBox Width="40"
+                                         Margin="4 0 8 0"
+                                         TextAlignment="Right"
+                                         Text="{Binding Width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBlock Width="40"
+                                           Text="Height:" />
+                                <TextBox Width="40"
+                                         Margin="4 0 8 0"
+                                         TextAlignment="Right"
+                                         Text="{Binding Height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBlock Width="40"
+                                           Text="Length:" />
+                                <TextBox Width="40"
+                                         Margin="4 0"
+                                         TextAlignment="Right"
+                                         Text="{Binding Length, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                            <TextBlock Grid.Column="3"
+                                       Text="{Binding Area, StringFormat={}{0:#,0.00}}"
+                                       HorizontalAlignment="Center"
+                                       Margin="2" />
+                            <TextBlock Grid.Column="4"
+                                       Text="{Binding Volume, StringFormat={}{0:#,0.00}, TargetNullValue='-'}"
+                                       HorizontalAlignment="Center"
+                                       Margin="2" />
+                        </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type viewModels:BallViewModel}">
+                        <Grid Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="23" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
+
+                            <Button Grid.Column="0"
+                                    Style="{StaticResource RemoveButton}" />
+
+                            <TextBlock Grid.Column="1"
+                                       Text="Ball"
+                                       HorizontalAlignment="Left"
+                                       Margin="2" />
+
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="2"
+                                        HorizontalAlignment="Left"
+                                        Margin="2">
+                                <TextBlock Width="40"
+                                           Text="Radius:" />
+                                <TextBox Width="40"
+                                         Margin="4 0"
+                                         TextAlignment="Right"
+                                         Text="{Binding Radius, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+
+                            <TextBlock Grid.Column="3"
+                                       Text="{Binding Area, StringFormat={}{0:#,0.00}}"
+                                       HorizontalAlignment="Center"
+                                       Margin="2" />
+
+                            <TextBlock Grid.Column="4"
+                                       Text="{Binding Volume, StringFormat={}{0:#,0.00}, TargetNullValue='-'}"
+                                       HorizontalAlignment="Center"
+                                       Margin="2" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.Resources>
+            </ListBox>
         </Grid>
     </ScrollViewer>
 </UserControl>

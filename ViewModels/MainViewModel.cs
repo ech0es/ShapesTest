@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
 using Autofac.Extras.CommonServiceLocator;
@@ -13,11 +14,16 @@ namespace ShapeTest.ViewModels
 
         public ICommand AddShapeCommand { get; }
 
+        public ICommand RemoveShapeCommand { get; }
+
         public MainViewModel()
         {
             var localIoc = new AutofacServiceLocator(new Bootstrapper().BootStrap());
-            AddShapeCommand = localIoc.GetInstance<AddShapeCommand>();
-            ((AddShapeCommand) AddShapeCommand).Shapes = Shapes; // the worst DI I have seen BTW((
+            var addShapeCommandFactory = localIoc.GetInstance<Func<ObservableCollection<ShapeViewModel>, AddShapeCommand>>();
+            var removeShapeCommandFactory = localIoc.GetInstance<Func<ObservableCollection<ShapeViewModel>, RemoveShapeCommand>>();
+
+            AddShapeCommand = addShapeCommandFactory(Shapes);
+            RemoveShapeCommand = removeShapeCommandFactory(Shapes);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

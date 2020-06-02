@@ -20,6 +20,7 @@ namespace ShapeTest
             builder.RegisterType<BallViewModel>().AsSelf();
             builder.RegisterType<SquareViewModel>().AsSelf();
             builder.RegisterType<AddShapeCommand>().AsSelf().SingleInstance();
+            builder.RegisterType<RemoveShapeCommand>().AsSelf().SingleInstance();
             builder.RegisterType<ShapeViewModelFactory>().AsImplementedInterfaces();
 
             return builder.Build();
