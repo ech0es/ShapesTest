@@ -320,7 +320,6 @@
                                 <GeometryModel3D>
                                     <GeometryModel3D.Geometry>
                                         <MeshGeometry3D
-                                            Positions="{Binding Path=., Converter={StaticResource ParallelepipedPointsConverter}}"
                                             TriangleIndices="
                                        0  1  2     2  3  0
                                        4  5  6     6  7  4
@@ -328,7 +327,16 @@
                                       12 13 14    14 15 12
                                       16 17 18    18 19 16
                                       20 21 22    22 23 20
-                                      " />
+                                      ">
+                                            <MeshGeometry3D.Positions>
+                                                <MultiBinding Converter="{StaticResource ParallelepipedPointsConverter}">
+                                                    <Binding Path="." />
+                                                    <Binding Path="Height"/>
+                                                    <Binding Path="Width"/>
+                                                    <Binding Path="Length"/>
+                                                </MultiBinding>
+                                            </MeshGeometry3D.Positions>
+                                        </MeshGeometry3D>
                                     </GeometryModel3D.Geometry>
 
                                     <GeometryModel3D.Material>

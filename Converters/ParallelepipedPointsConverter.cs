@@ -6,13 +6,13 @@ using ShapeTest.ViewModels;
 
 namespace ShapeTest.Converters
 {
-    public class ParallelepipedPointsConverter : IValueConverter
+    public class ParallelepipedPointsConverter : IMultiValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null) return null;
+            if (values == null || values.Length == 0 || !(values[0] is ParallelepipedViewModel)) return null;
 
-            var parallelepiped = (ParallelepipedViewModel) value;
+            var parallelepiped = (ParallelepipedViewModel)values[0];
 
             var maxRib = Math.Max(parallelepiped.Length, Math.Max(parallelepiped.Width, parallelepiped.Height));
             var height = parallelepiped.Height / maxRib;
@@ -47,7 +47,7 @@ namespace ShapeTest.Converters
             return points;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotSupportedException();
         }
