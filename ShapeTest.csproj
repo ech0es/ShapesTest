@@ -75,6 +75,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Converters\ParallelepipedPointsConverter.cs" />
     <Compile Include="Enums\Shapes.cs" />
     <Compile Include="Factories\IShapeViewModelFactory.cs" />
     <Compile Include="Factories\ShapeViewModelFactory.cs" />
@@ -144,9 +145,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Converters\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Images\ball.png" />
     <Resource Include="Images\circle.png" />
